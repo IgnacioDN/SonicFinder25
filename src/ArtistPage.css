@@ -1,0 +1,49 @@
+.artistas-page .spotify-grid-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .search-container {
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    padding: 10px;
+    width: 300px;
+  }
+  
+  .search-button {
+    padding: 10px;
+  }
+  
+  .artistas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .artista-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .artista-card img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .artista-card h4 {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  
+  .artista-card a {
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+  .artista-card a:hover {
+    text-decoration: underline;
+  }
+  
