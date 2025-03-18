@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { searchSpotify } from "../services/spotifyService";
-import ArtistasSlider from "../components/ArtistasSlider"; 
+import ArtistasSlider from "../components/ArtistasSlider";
 import "../components/styles/ArtistPage.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons'; 
@@ -8,37 +8,44 @@ import Footer from "../components/Footer";
 
 const Artistas = () => {
   const [query, setQuery] = useState("");
-  const [searchType, setSearchType] = useState("artist"); 
+  const [searchType, setSearchType] = useState("artist"); // 'artist' o 'track'
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
 
   const handleImageError = (index) => {
-    const updatedResults = [...searchResults];
-    updatedResults[index].image = '/default-image.jpg';  
-    setSearchResults(updatedResults);  
+    setSearchResults((prevResults) =>
+      prevResults.map((item, i) => 
+        i === index ? { ...item, image: "/default-image.jpg" } : item
+      )
+    );
   };
 
   const fetchData = async () => {
-    if (!query) return; 
-    setIsSearching(true); 
+    if (!query.trim()) return;
 
-    const results = await searchSpotify(query, searchType); 
+    setIsSearching(true);
 
-    setSearchResults(results); 
+    try {
+      const results = await searchSpotify(query, searchType);  // Ahora se pasa el searchType a la función de búsqueda
+      console.log("Resultados obtenidos:", results);
+      setSearchResults(results);
+    } catch (error) {
+      console.error("Error buscando en Spotify:", error);
+    }
 
-    setIsSearching(false); 
+    setIsSearching(false);
   };
 
   useEffect(() => {
-    fetchData(); 
-  }, [query, searchType]);
+    if (query) {
+      fetchData();  // Llamada a la función para obtener los resultados cuando cambie el query
+    }
+  }, [query, searchType]); // Se vuelve a ejecutar cuando cambia el query o el tipo de búsqueda
 
   return (
     <div className="artistas-container">
-      {}
       <ArtistasSlider />
-      
-      {}
+
       <div className="search-container">
         <input
           type="text"
@@ -52,7 +59,6 @@ const Artistas = () => {
         </button>
       </div>
 
-      {}
       <div className="search-filters">
         <div className="filter-option">
           <button
@@ -61,45 +67,48 @@ const Artistas = () => {
           >
             
           </button>
-          <span>Artistas</span>
         </div>
         <div className="filter-option">
           <button
             onClick={() => setSearchType("track")} 
             className={searchType === "track" ? "active" : ""}
           >
+            
           </button>
-          <span>Canciones</span>
         </div>
       </div>
 
-      {}
       {query && !isSearching && (
         <p className="search-results-info">Resultados con: {query}</p>
       )}
 
       <div className="artistas-grid">
         {isSearching ? (
-          <p>Cargando resultados...</p> do
+          <p>Cargando resultados...</p>
         ) : (
-          searchResults.map((item, index) => (
-            <div key={item.id} className="artista-card">
-              {}
-              <img 
-                src={item.image || '/default-image.jpg'} 
-                alt={searchType === "artist" ? item.name : item.name} 
-                onError={() => handleImageError(index)}  
-              />
-              <h4>{item.name}</h4>
-              <a href={item.url} target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faSpotify} className="spotify-icon" />
-                Escuchar en Spotify
-              </a>
-            </div>
-          ))
+          searchResults.length > 0 ? (
+            searchResults.map((item, index) => (
+              <div key={item.id || index} className="artista-card">
+                <img 
+                  src={item.image || '/default-image.jpg'} 
+                  alt={item.name} 
+                  onError={() => handleImageError(index)}  
+                />
+                <h4>{item.name}</h4>
+                <p>{item.artist && `Por: ${item.artist}`}</p> {/* Mostrar el artista si es una canción */}
+                <a href={item.url} target="_blank" rel="noopener noreferrer">
+                  <FontAwesomeIcon icon={faSpotify} className="spotify-icon" />
+                  {searchType === 'artist' ? 'Escuchar en Spotify' : 'Ver en Spotify'}
+                </a>
+              </div>
+            ))
+          ) : (
+            <p>No se encontraron resultados.</p>
+          )
         )}
       </div>
-      <Footer /> 
+
+      <Footer />
     </div>
   );
 };

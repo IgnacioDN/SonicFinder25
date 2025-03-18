@@ -27,31 +27,45 @@ const getSpotifyToken = async () => {
   }
 };
 
-const searchSpotify = async (query) => {
+const searchSpotify = async (query, searchType) => {
   if (!query) return [];
 
   const token = await getSpotifyToken();
   if (!token) return [];
 
   try {
+    // Modificar el tipo de búsqueda según el tipo (artistas o canciones)
     const response = await fetch(
-      `https://api.spotify.com/v1/search?q=${query}&type=artist&limit=18`,
+      `https://api.spotify.com/v1/search?q=${query}&type=${searchType}&limit=18`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
     const data = await response.json();
-    if (!data.artists || !data.artists.items) {
-      throw new Error('No se encontraron artistas');
+    console.log("Datos obtenidos de la búsqueda:", data); // Log para revisar la respuesta
+
+    // Verificar si los datos existen y mapearlos dependiendo del tipo de búsqueda
+    if (!data[searchType + 's'] || !data[searchType + 's'].items) {
+      throw new Error(`No se encontraron ${searchType === 'artist' ? 'artistas' : 'canciones'}`);
     }
 
-    return data.artists.items.map(artist => ({
-      id: artist.id,
-      name: artist.name,
-      image: artist.images.length > 0 ? artist.images[0].url : 'https://via.placeholder.com/150',
-      url: `https://open.spotify.com/artist/${artist.id}`,
-    }));
+    // Mapeo de los resultados dependiendo del tipo de búsqueda
+    if (searchType === 'artist') {
+      return data.artists.items.map((artist) => ({
+        id: artist.id,
+        name: artist.name,
+        image: artist.images.length > 0 ? artist.images[0].url : 'https://via.placeholder.com/150',
+        url: `https://open.spotify.com/artist/${artist.id}`,
+      }));
+    } else if (searchType === 'track') {
+      return data.tracks.items.map((track) => ({
+        id: track.id,
+        name: track.name,
+        image: track.album.images.length > 0 ? track.album.images[0].url : 'https://via.placeholder.com/150',
+        url: `https://open.spotify.com/track/${track.id}`,
+      }));
+    }
   } catch (error) {
-    console.error('Error al buscar artistas:', error);
+    console.error('Error al buscar en Spotify:', error);
     return [];
   }
 };
@@ -60,6 +74,7 @@ const SpotifyGrid = () => {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [searchType, setSearchType] = useState('artist'); // Nuevo estado para tipo de búsqueda
 
   useEffect(() => {
     if (query.trim() === '') {
@@ -69,13 +84,13 @@ const SpotifyGrid = () => {
 
     const delayDebounceFn = setTimeout(async () => {
       setIsLoading(true);
-      const results = await searchSpotify(query);
+      const results = await searchSpotify(query, searchType); // Pasar searchType aquí
       setData(results);
       setIsLoading(false);
-    }, 500); 
+    }, 500); // 500ms de espera para debouncing
 
     return () => clearTimeout(delayDebounceFn);
-  }, [query]);
+  }, [query, searchType]); // Ejecutar también cuando cambie el tipo de búsqueda
 
   return (
     <section className="spotify-grid">
@@ -91,32 +106,53 @@ const SpotifyGrid = () => {
         />
       </form>
 
-      {}
+      <div className="search-filters">
+        <div className="filter-option">
+          <button
+            onClick={() => setSearchType('artist')} 
+            className={searchType === 'artist' ? 'active' : ''}
+          >
+            Artistas
+          </button>
+        </div>
+        <div className="filter-option">
+          <button
+            onClick={() => setSearchType('track')} 
+            className={searchType === 'track' ? 'active' : ''}
+          >
+            Canciones
+          </button>
+        </div>
+      </div>
+
       {query && (
         <p className="search-results-info">Resultados con: {query}</p>
       )}
 
-<div className="grid-container">
-  {isLoading ? (
-    <p>Cargando artistas...</p> 
-  ) : (
-    data.map((artist) => (
-      <div key={artist.id} className="grid-item">
-        {}
-        <img 
-          src={artist.image || "/default-image.jpg"} 
-          alt={artist.name} 
-          onError={(e) => e.target.src = "/default-image.jpg"} 
-        />
-        <h3>{artist.name}</h3>
-        <a href={artist.url} target="_blank" rel="noopener noreferrer">
-          <FontAwesomeIcon icon={faSpotify} className="spotify-icon" />
-          Escuchar en Spotify
-        </a>
+      <div className="grid-container">
+        {isLoading ? (
+          <p>Cargando resultados...</p>
+        ) : (
+          data.length === 0 ? (
+            <p>No se encontraron resultados.</p>
+          ) : (
+            data.map((item) => (
+              <div key={item.id} className="grid-item">
+                <img
+                  src={item.image || '/default-image.jpg'}
+                  alt={item.name}
+                  onError={(e) => e.target.src = '/default-image.jpg'} // Manejo de errores de imagen
+                />
+                <h3>{item.name}</h3>
+                <a href={item.url} target="_blank" rel="noopener noreferrer">
+                  <FontAwesomeIcon icon={faSpotify} className="spotify-icon" />
+                  {searchType === 'artist' ? 'Escuchar en Spotify' : 'Ver en Spotify'}
+                </a>
+              </div>
+            ))
+          )
+        )}
       </div>
-    ))
-  )}
-</div>
     </section>
   );
 };

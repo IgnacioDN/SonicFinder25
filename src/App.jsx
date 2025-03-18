@@ -12,8 +12,6 @@ import InformativeSection from "./components/InformativeSection";
 import Footer from "./components/Footer";
 
 import Artistas from "./pages/Artistas";
-import Contacto from "./pages/Contacto";
-import Discograficas from "./pages/Discograficas";
 
 import banner1 from "./assets/banners/bannerconcertmedium.jpg";
 import banner2 from "./assets/banners/pexels-chaitaastic-2093323.jpg";
@@ -107,8 +105,6 @@ const App = () => {
           }
         />
         <Route path="/artistas" element={<Artistas />} />
-        <Route path="/discograficas" element={<Discograficas />} />
-        <Route path="/contacto" element={<Contacto />} />
       </Routes>
     </div>
   );
