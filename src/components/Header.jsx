@@ -1,13 +1,11 @@
-// src/components/Header.js
-import React, { useState, useEffect } from "react"; // Asegúrate de importar useState aquí
+import React, { useState, useEffect } from "react";
 import CategoriesMenu from "./CategoriesMenu";
-import "./Header.css";
+import "./styles/Header.css";
 import logo from "../assets/logo/cover-removebg-preview.png"; 
 
 const Header = ({ isDarkMode, toggleTheme }) => {
   const [sticky, setSticky] = useState(false);
 
-  // Manejo del scroll para hacer el header sticky
   useEffect(() => {
     const handleScroll = () => {
       setSticky(window.scrollY > 100);
@@ -20,10 +18,16 @@ const Header = ({ isDarkMode, toggleTheme }) => {
   return (
     <header className={`header ${sticky ? "sticky" : ""} ${isDarkMode ? "dark-mode" : "light-mode"}`}>
       <div className="logo-container">
-        <img src={logo} alt="SonicFinder Logo" className="logo" />
+        <img 
+          src={logo} 
+          alt="SonicFinder Logo" 
+          className="logo" 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+          style={{ cursor: "pointer" }} 
+        />
       </div>
 
-      <CategoriesMenu />
+      <CategoriesMenu isDarkMode={isDarkMode} />
 
       <button onClick={toggleTheme} className="modo-oscuro-btn">
         {isDarkMode ? "Modo Oscuro" : "Modo Claro"}

@@ -1,11 +1,11 @@
 import React from 'react';
 import videoFile from "../assets/banners/12315445-uhd_3840_2160_25fps.mp4";
-import banner from "../assets/banners/pexels-dmitry-demidov-515774-3784566.jpg"; // Corregir la ruta
+import banner from "../assets/banners/pexels-dmitry-demidov-515774-3784566.jpg"; 
 
 const InformativeSection = () => {
   return (
     <section className="informative-section" id="informative-section">
-      <h2 className="informative-title">Sobre Nosotros</h2> {/* Título sobre ambas columnas */}
+      <h2 className="informative-title">Sobre Nosotros</h2> 
       <div className="informative-content">
         <div className="informative-left">
           <div className="informative-banner">

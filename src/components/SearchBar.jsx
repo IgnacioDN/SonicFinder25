@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import './SearchBar.css'; // Asegúrate de crear un archivo de estilos
-import { searchSpotify } from './services/spotifyService'; // Asegúrate de que la ruta sea correcta
-
+import './SearchBar.css'; 
+import { searchSpotify } from './services/spotifyService'; 
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');

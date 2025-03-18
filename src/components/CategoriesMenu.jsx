@@ -1,25 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
-import "../CategoriesMenu.css";
-import BannerImage from '../assets/banners/pexels-john-tekeridis-21837-340103.jpg';
+import { Link } from 'react-router-dom';
+import './styles/CategoriesMenu.css';
+import bannerImage from '../assets/banners/pexels-john-tekeridis-21837-340103.jpg';
 
-const CategoriesMenu = () => {
+const CategoriesMenu = ({ isDarkMode }) => {
+  const [menuOpen, setMenuOpen] = useState(false); 
   const [activeCategory, setActiveCategory] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const navigate = useNavigate(); 
 
   const categories = [
-    { name: 'Artistas', path: '/artistas' }, 
-    { name: 'Géneros', path: '/generos' },
-    { name: 'Novedades 2025' }, 
-    { name: 'Discográficas', path: '/discograficas' },
-    { name: 'Contacto', path: '/contacto', icon: <i className="fas fa-phone"></i> }
+    { name: 'Inicio', path: '/' },
+    { name: 'Artistas', path: '/artistas' },
+    { name: 'Novedades 2025' },
+   
+    { 
+      name: 'Contacto', 
+      path: 'https://docs.google.com/forms/d/e/1FAIpQLSfTA9NGlo7R3qkihyvpH2VxHYJM8D7GI0C8BANvUz8pkn7uTw/viewform?usp=dialog', 
+      external: true,
+      icon: <i className="fas fa-phone"></i> 
+    },
   ];
-
   const handleCategoryClick = (category) => {
-    if (category.name === "Novedades 2025") {
+    if (category.name === 'Novedades 2025') {
       setActiveCategory(category.name);
       setModalOpen(true);
+    } else {
+      setMenuOpen(false);
     }
   };
 
@@ -28,46 +34,41 @@ const CategoriesMenu = () => {
     setActiveCategory(null);
   };
 
-  useEffect(() => {
-    if (modalOpen) {
-      document.body.classList.add("modal-open");
-    } else {
-      document.body.classList.remove("modal-open");
-    }
-  }, [modalOpen]);
-
   return (
-    <nav className="categories-menu">
-      <div className="menu">
-        <ul>
-          {categories.map((category, index) => (
-            <li key={index} className="category-item">
-              {category.path ? (
-                <Link to={category.path} className="category-link">
-                  {category.name}
-                  {category.icon && <span className="icon">{category.icon}</span>}
-                </Link>
-              ) : (
-                <a href="#" className="category-link" onClick={() => handleCategoryClick(category)}>
-                  {category.name}
-                </a>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+    <nav className={`categories-menu ${isDarkMode ? 'dark-mode' : 'light-mode'} ${menuOpen ? 'menu-open' : ''}`}>
+      <button className="hamburger-menu" onClick={() => setMenuOpen(!menuOpen)}>
+        <div></div>
+        <div></div>
+        <div></div>
+      </button>
+      
+      <ul className={`category-list ${menuOpen ? 'show' : ''}`}>
+        {categories.map((category, index) => (
+          <li key={index} className="category-item">
+            {category.path ? (
+              <Link to={category.path} onClick={() => handleCategoryClick(category)}>
+                {category.name} {category.icon && <span className="icon">{category.icon}</span>}
+              </Link>
+            ) : (
+              <a href="#" onClick={() => handleCategoryClick(category)}>
+                {category.name}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
 
-      {modalOpen && activeCategory === "Novedades 2025" && (
-        <div className={`modal show`}>
+      {modalOpen && activeCategory === 'Novedades 2025' && (
+        <div className="modal show">
           <div className="modal-content">
             <span className="close" onClick={closeModal}>×</span>
-            <h2>{activeCategory}</h2>
-            <img src={BannerImage} alt="Banner Novedades" className="modal-banner" />
+            <h2>Novedades 2025</h2>
+            <img src={bannerImage} alt="Banner Novedades" className="modal-banner" />
             <p>Contenido detallado sobre las novedades de 2025. ¡Explora las últimas tendencias y lanzamientos!</p>
-            <a 
-              href="https://open.spotify.com/playlist/37LIA8IcVpMhaWZY2V2Ujy" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <a
+              href="https://open.spotify.com/playlist/37LIA8IcVpMhaWZY2V2Ujy"
+              target="_blank"
+              rel="noopener noreferrer"
               className="spotify-button"
             >
               <i className="fab fa-spotify spotify-icon"></i> Escuchar en Spotify

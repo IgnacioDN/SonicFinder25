@@ -1,8 +1,6 @@
-// src/components/SpotifyGrid.js
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpotify } from '@fortawesome/free-brands-svg-icons'; // Importar el ícono de Spotify
-
+import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 
 const getSpotifyToken = async () => {
   const clientId = 'e936a2c33fbd4ee4b3121cdf20207874';
@@ -29,7 +27,7 @@ const getSpotifyToken = async () => {
   }
 };
 
-export const searchSpotify = async (query) => {
+const searchSpotify = async (query) => {
   if (!query) return [];
 
   const token = await getSpotifyToken();
@@ -37,10 +35,8 @@ export const searchSpotify = async (query) => {
 
   try {
     const response = await fetch(
-      `https://api.spotify.com/v1/search?q=${query}&type=artist&limit=5`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      `https://api.spotify.com/v1/search?q=${query}&type=artist&limit=18`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
 
     const data = await response.json();
@@ -48,15 +44,12 @@ export const searchSpotify = async (query) => {
       throw new Error('No se encontraron artistas');
     }
 
-    return data.artists.items.map(artist => {
-      const image = artist.images.length > 0 ? artist.images[0].url : 'https://via.placeholder.com/150';
-      return {
-        id: artist.id,
-        name: artist.name,
-        image: image,
-        url: `https://open.spotify.com/artist/${artist.id}`
-      };
-    });
+    return data.artists.items.map(artist => ({
+      id: artist.id,
+      name: artist.name,
+      image: artist.images.length > 0 ? artist.images[0].url : 'https://via.placeholder.com/150',
+      url: `https://open.spotify.com/artist/${artist.id}`,
+    }));
   } catch (error) {
     console.error('Error al buscar artistas:', error);
     return [];
@@ -68,55 +61,62 @@ const SpotifyGrid = () => {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearch = (e) => {
-    setQuery(e.target.value);
-  };
+  useEffect(() => {
+    if (query.trim() === '') {
+      setData([]);
+      return;
+    }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (query.trim() === '') return;
-    setIsLoading(true);
+    const delayDebounceFn = setTimeout(async () => {
+      setIsLoading(true);
+      const results = await searchSpotify(query);
+      setData(results);
+      setIsLoading(false);
+    }, 500); 
 
-    const results = await searchSpotify(query);
-    setData(results);
-    setIsLoading(false);
-  };
+    return () => clearTimeout(delayDebounceFn);
+  }, [query]);
 
   return (
     <section className="spotify-grid">
       <h2 className="spotify-grid-title">Te conectamos con Spotify</h2>
-      {/* Formulario de búsqueda */}
-      <form onSubmit={handleSubmit} className="search-form">
+
+      <form className="search-form">
         <input
           type="text"
           placeholder="Buscar artistas, novedades, géneros..."
           value={query}
-          onChange={handleSearch}
+          onChange={(e) => setQuery(e.target.value)}
           className="search-input"
         />
-        <button type="submit" className="search-button">Buscar</button>
       </form>
 
-      {isLoading ? (
-        <p>Cargando artistas...</p>
-      ) : (
+      {}
+      {query && (
+        <p className="search-results-info">Resultados con: {query}</p>
+      )}
+
 <div className="grid-container">
-  {data.length > 0 ? (
+  {isLoading ? (
+    <p>Cargando artistas...</p> 
+  ) : (
     data.map((artist) => (
       <div key={artist.id} className="grid-item">
-        <img src={artist.image} alt={artist.name} />
+        {}
+        <img 
+          src={artist.image || "/default-image.jpg"} 
+          alt={artist.name} 
+          onError={(e) => e.target.src = "/default-image.jpg"} 
+        />
         <h3>{artist.name}</h3>
         <a href={artist.url} target="_blank" rel="noopener noreferrer">
-  <FontAwesomeIcon icon={faSpotify} className="spotify-icon" />
-  Escuchar en Spotify
-</a>
+          <FontAwesomeIcon icon={faSpotify} className="spotify-icon" />
+          Escuchar en Spotify
+        </a>
       </div>
     ))
-  ) : (
-    <p>No se encontraron resultados.</p>
   )}
 </div>
-      )}
     </section>
   );
 };

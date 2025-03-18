@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Route, Routes, BrowserRouter as Router, useLocation } from 'react-router-dom';
-import "./App.css";
+import { Route, Routes, useLocation } from "react-router-dom";
+import './components/styles/App.css';
 import Header from "./components/Header";
+import CategoriesMenu from "./components/CategoriesMenu"; 
 import BannerSlider from "./components/BannerSlider";
 import SpotifyGrid from "./components/SpotifyGrid";
 import Recomendados from "./components/Recomendados";
 import Content from "./components/Content";
 import { searchSpotify } from "./services/spotifyService";
 import InformativeSection from "./components/InformativeSection";
+import Footer from "./components/Footer";
+
 import Artistas from "./pages/Artistas";
+import Contacto from "./pages/Contacto";
+import Discograficas from "./pages/Discograficas";
+
 import banner1 from "./assets/banners/bannerconcertmedium.jpg";
 import banner2 from "./assets/banners/pexels-chaitaastic-2093323.jpg";
 import banner3 from "./assets/banners/pexels-jc-siller-30672065-8649332.jpg";
@@ -21,7 +27,24 @@ const App = () => {
     return localStorage.getItem("darkMode") === "true";
   });
 
+  const [isMobile, setIsMobile] = useState(false);  
+
   const location = useLocation();
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) { 
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    handleResize(); 
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,52 +90,25 @@ const App = () => {
 
   return (
     <div className={isDarkMode ? "dark-mode" : "light-mode"}>
-      <Header toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
-      <BannerSlider banners={[banner1, banner2, banner3]} />
-
-      {/* Sección del Buscador */}
-      <div className="search-section fade-in">
-        <h2 className="spotify-grid-title">
-          {searchResults.length > 0 ? `Resultados para: ${query}` : "Explora nuevos artistas en Spotify"}
-        </h2>
-        <div className="search-container">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Buscar artistas..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <button className="search-button" onClick={handleSearch} disabled={isSearching}>
-            Buscar
-          </button>
-        </div>
-        <div className="artistas-grid">
-          {isSearching ? (
-            <p>Buscando...</p>
-          ) : (
-            searchResults.map((artist) => (
-              <div key={artist.id} className="artista-card">
-                <img src={artist.image} alt={artist.name} />
-                <h4>{artist.name}</h4>
-                <a href={artist.url} target="_blank" rel="noopener noreferrer">
-                  Escuchar en Spotify
-                </a>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-
-      {/* Sección Informativa */}
-      <InformativeSection />
-
-      {/* Sección Recomendados */}
-      <Recomendados />
-
+      <Header toggleTheme={toggleTheme} isDarkMode={isDarkMode} isMobile={isMobile} />
+      
       <Routes>
-        <Route path="/" element={<Content />} />
+        <Route
+          path="/"
+          element={
+            <>
+              <BannerSlider banners={[banner1, banner2, banner3]} />
+              <SpotifyGrid />
+              <InformativeSection />
+              <Recomendados />
+              <Content />
+              <Footer />
+            </>
+          }
+        />
         <Route path="/artistas" element={<Artistas />} />
+        <Route path="/discograficas" element={<Discograficas />} />
+        <Route path="/contacto" element={<Contacto />} />
       </Routes>
     </div>
   );

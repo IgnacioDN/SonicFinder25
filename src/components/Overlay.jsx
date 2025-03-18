@@ -3,12 +3,10 @@ import React, { useState, useEffect } from 'react';
 const BannerSlider = ({ banners }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Función para cambiar al siguiente banner
   const nextBanner = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
   };
 
-  // Función para cambiar al banner anterior
   const prevBanner = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? banners.length - 1 : prevIndex - 1
@@ -18,10 +16,10 @@ const BannerSlider = ({ banners }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentMessage((prev) => (prev + 1) % messages.length);
-      console.log("Mensaje actual:", messages[currentMessage]); // Verifica si el mensaje cambia
+      console.log("Mensaje actual:", messages[currentMessage]); 
     }, 4000);
     return () => clearInterval(interval);
-  }, [currentMessage]);  // Esto asegurará que el mensaje se actualice cada 4 segundos
+  }, [currentMessage]);  
   
 
   return (
@@ -33,11 +31,11 @@ const BannerSlider = ({ banners }) => {
             alt={`Banner ${currentIndex + 1}`}
             className="carousel-image"
           />
-          {/* Aquí agregamos el Overlay */}
+          {/}
           <Overlay />
         </div>
 
-        {/* Botones para navegar entre los banners */}
+        {}
         <button className="carousel-button carousel-button-left" onClick={prevBanner}>
           &lt;
         </button>
