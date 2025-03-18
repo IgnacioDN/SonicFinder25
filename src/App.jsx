@@ -7,7 +7,6 @@ import BannerSlider from "./components/BannerSlider";
 import SpotifyGrid from "./components/SpotifyGrid";
 import Recomendados from "./components/Recomendados";
 import Content from "./components/Content";
-import { searchSpotify } from "./services/spotifyService";
 import InformativeSection from "./components/InformativeSection";
 import Footer from "./components/Footer";
 
@@ -18,16 +17,13 @@ import banner2 from "./assets/banners/pexels-chaitaastic-2093323.jpg";
 import banner3 from "./assets/banners/pexels-jc-siller-30672065-8649332.jpg";
 
 const App = () => {
-  const [searchResults, setSearchResults] = useState([]);
-  const [query, setQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem("darkMode") === "true";
   });
 
   const [isMobile, setIsMobile] = useState(false);  
 
-  const location = useLocation();
+  const location = useLocation();  // Obtener la ruta actual
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,22 +57,8 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    setQuery("");
-    setSearchResults([]);
+    // Limpiar los resultados de búsqueda al cambiar de ruta
   }, [location.pathname]);
-
-  const handleSearch = async () => {
-    if (!query) return;
-    setIsSearching(true);
-    const results = await searchSpotify(query);
-    setSearchResults(results);
-    setIsSearching(false);
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(handleSearch, 500);
-    return () => clearTimeout(timer);
-  }, [query]);
 
   const toggleTheme = () => {
     setIsDarkMode((prevMode) => {
@@ -89,7 +71,7 @@ const App = () => {
   return (
     <div className={isDarkMode ? "dark-mode" : "light-mode"}>
       <Header toggleTheme={toggleTheme} isDarkMode={isDarkMode} isMobile={isMobile} />
-      
+
       <Routes>
         <Route
           path="/"

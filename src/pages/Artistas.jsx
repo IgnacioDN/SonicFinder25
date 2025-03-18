@@ -65,7 +65,7 @@ const Artistas = () => {
             onClick={() => setSearchType("artist")} 
             className={searchType === "artist" ? "active" : ""}
           >
-            
+            Artistas
           </button>
         </div>
         <div className="filter-option">
@@ -73,7 +73,7 @@ const Artistas = () => {
             onClick={() => setSearchType("track")} 
             className={searchType === "track" ? "active" : ""}
           >
-            
+            Canciones
           </button>
         </div>
       </div>
@@ -95,7 +95,6 @@ const Artistas = () => {
                   onError={() => handleImageError(index)}  
                 />
                 <h4>{item.name}</h4>
-                <p>{item.artist && `Por: ${item.artist}`}</p> {/* Mostrar el artista si es una canción */}
                 <a href={item.url} target="_blank" rel="noopener noreferrer">
                   <FontAwesomeIcon icon={faSpotify} className="spotify-icon" />
                   {searchType === 'artist' ? 'Escuchar en Spotify' : 'Ver en Spotify'}

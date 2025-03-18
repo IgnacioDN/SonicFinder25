@@ -34,21 +34,18 @@ const searchSpotify = async (query, searchType) => {
   if (!token) return [];
 
   try {
-    // Modificar el tipo de búsqueda según el tipo (artistas o canciones)
     const response = await fetch(
       `https://api.spotify.com/v1/search?q=${query}&type=${searchType}&limit=18`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
     const data = await response.json();
-    console.log("Datos obtenidos de la búsqueda:", data); // Log para revisar la respuesta
+    console.log("Datos obtenidos de la búsqueda:", data); 
 
-    // Verificar si los datos existen y mapearlos dependiendo del tipo de búsqueda
     if (!data[searchType + 's'] || !data[searchType + 's'].items) {
       throw new Error(`No se encontraron ${searchType === 'artist' ? 'artistas' : 'canciones'}`);
     }
 
-    // Mapeo de los resultados dependiendo del tipo de búsqueda
     if (searchType === 'artist') {
       return data.artists.items.map((artist) => ({
         id: artist.id,
@@ -74,7 +71,7 @@ const SpotifyGrid = () => {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [searchType, setSearchType] = useState('artist'); // Nuevo estado para tipo de búsqueda
+  const [searchType, setSearchType] = useState('artist');
 
   useEffect(() => {
     if (query.trim() === '') {
@@ -84,13 +81,13 @@ const SpotifyGrid = () => {
 
     const delayDebounceFn = setTimeout(async () => {
       setIsLoading(true);
-      const results = await searchSpotify(query, searchType); // Pasar searchType aquí
+      const results = await searchSpotify(query, searchType);
       setData(results);
       setIsLoading(false);
-    }, 500); // 500ms de espera para debouncing
+    }, 500); 
 
     return () => clearTimeout(delayDebounceFn);
-  }, [query, searchType]); // Ejecutar también cuando cambie el tipo de búsqueda
+  }, [query, searchType]);
 
   return (
     <section className="spotify-grid">
@@ -105,25 +102,6 @@ const SpotifyGrid = () => {
           className="search-input"
         />
       </form>
-
-      <div className="search-filters">
-        <div className="filter-option">
-          <button
-            onClick={() => setSearchType('artist')} 
-            className={searchType === 'artist' ? 'active' : ''}
-          >
-            Artistas
-          </button>
-        </div>
-        <div className="filter-option">
-          <button
-            onClick={() => setSearchType('track')} 
-            className={searchType === 'track' ? 'active' : ''}
-          >
-            Canciones
-          </button>
-        </div>
-      </div>
 
       {query && (
         <p className="search-results-info">Resultados con: {query}</p>
