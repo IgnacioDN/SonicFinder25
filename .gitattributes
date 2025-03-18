@@ -1,0 +1,16 @@
+# Normaliza las líneas de fin de línea en los archivos de texto
+* text=auto
+
+# Archivos binarios (imágenes, videos, fuentes)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.svg binary
+*.mp4 binary
+*.webm binary
+*.ogg binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
