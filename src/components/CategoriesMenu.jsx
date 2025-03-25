@@ -15,8 +15,7 @@ const CategoriesMenu = ({ isDarkMode }) => {
    
     { 
       name: 'Contacto', 
-      path: 'https://docs.google.com/forms/d/e/1FAIpQLSfTA9NGlo7R3qkihyvpH2VxHYJM8D7GI0C8BANvUz8pkn7uTw/viewform?usp=dialog', 
-      external: true,
+      path: '/contacto', 
       icon: <i className="fas fa-phone"></i> 
     },
   ];

@@ -4,7 +4,7 @@ import banner from "../assets/banners/pexels-dmitry-demidov-515774-3784566.jpg";
 
 const InformativeSection = () => {
   return (
-    <section className="informative-section" id="informative-section">
+    <section className="informative-section fade-in">
       <h2 className="informative-title">Sobre Nosotros</h2> 
       <div className="informative-content">
         <div className="informative-left">
@@ -23,15 +23,17 @@ const InformativeSection = () => {
               <h3>Descubre nuestros estudios de grabación</h3>
               <p>En SonicFinder, ofrecemos estudios de última tecnología para la producción de música de alta calidad.</p>
             </div>
-            <video controls className="informative-video"
-            autoPlay
-              muted
-              loop
-              playsInline
-            >
-              <source src={videoFile} type="video/mp4" />
-              Tu navegador no soporta el video.
-            </video>
+            <video
+  className="informative-video"
+  autoPlay
+  muted
+  loop
+  playsInline
+>
+  <source src={videoFile} type="video/mp4" />
+  Tu navegador no soporta el video.
+</video>
+
           </div>
         </div>
       </div>
@@ -40,3 +42,4 @@ const InformativeSection = () => {
 };
 
 export default InformativeSection;
+

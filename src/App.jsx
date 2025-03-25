@@ -9,8 +9,9 @@ import Recomendados from "./components/Recomendados";
 import Content from "./components/Content";
 import InformativeSection from "./components/InformativeSection";
 import Footer from "./components/Footer";
-
 import Artistas from "./pages/Artistas";
+import ContactPage from "./pages/ContactPage";
+
 
 import banner1 from "./assets/banners/bannerconcertmedium.jpg";
 import banner2 from "./assets/banners/pexels-chaitaastic-2093323.jpg";
@@ -22,8 +23,11 @@ const App = () => {
   });
 
   const [isMobile, setIsMobile] = useState(false);  
-
   const location = useLocation();  // Obtener la ruta actual
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,6 +44,7 @@ const App = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Función para aplicar la animación de scroll en las secciones
   useEffect(() => {
     const handleScroll = () => {
       document.querySelectorAll(".fade-in").forEach((element) => {
@@ -87,6 +92,7 @@ const App = () => {
           }
         />
         <Route path="/artistas" element={<Artistas />} />
+        <Route path="/contacto" element={<ContactPage />} />
       </Routes>
     </div>
   );

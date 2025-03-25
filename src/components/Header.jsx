@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import CategoriesMenu from "./CategoriesMenu";
 import "./styles/Header.css";
 import logo from "../assets/logo/cover-removebg-preview.png"; 
@@ -18,13 +19,14 @@ const Header = ({ isDarkMode, toggleTheme }) => {
   return (
     <header className={`header ${sticky ? "sticky" : ""} ${isDarkMode ? "dark-mode" : "light-mode"}`}>
       <div className="logo-container">
-        <img 
-          src={logo} 
-          alt="SonicFinder Logo" 
-          className="logo" 
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
-          style={{ cursor: "pointer" }} 
-        />
+      <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+  <img 
+    src={logo} 
+    alt="SonicFinder Logo" 
+    className="logo" 
+    style={{ cursor: "pointer" }} 
+  />
+</Link>
       </div>
 
       <CategoriesMenu isDarkMode={isDarkMode} />

@@ -1,92 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
-
-const getSpotifyToken = async () => {
-  const clientId = 'e936a2c33fbd4ee4b3121cdf20207874';
-  const clientSecret = '36b2e82ae9f44a0c8b795187fa07b8d6';
-  const credentials = `${clientId}:${clientSecret}`;
-
-  try {
-    const response = await fetch('https://accounts.spotify.com/api/token', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${btoa(credentials)}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: 'grant_type=client_credentials',
-    });
-
-    if (!response.ok) throw new Error('Error al obtener token de Spotify');
-
-    const data = await response.json();
-    return data.access_token;
-  } catch (error) {
-    console.error('Error en getSpotifyToken:', error);
-    return null;
-  }
-};
-
-const searchSpotify = async (query, searchType) => {
-  if (!query) return [];
-
-  const token = await getSpotifyToken();
-  if (!token) return [];
-
-  try {
-    const response = await fetch(
-      `https://api.spotify.com/v1/search?q=${query}&type=${searchType}&limit=18`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    const data = await response.json();
-    console.log("Datos obtenidos de la búsqueda:", data); 
-
-    if (!data[searchType + 's'] || !data[searchType + 's'].items) {
-      throw new Error(`No se encontraron ${searchType === 'artist' ? 'artistas' : 'canciones'}`);
-    }
-
-    if (searchType === 'artist') {
-      return data.artists.items.map((artist) => ({
-        id: artist.id,
-        name: artist.name,
-        image: artist.images.length > 0 ? artist.images[0].url : 'https://via.placeholder.com/150',
-        url: `https://open.spotify.com/artist/${artist.id}`,
-      }));
-    } else if (searchType === 'track') {
-      return data.tracks.items.map((track) => ({
-        id: track.id,
-        name: track.name,
-        image: track.album.images.length > 0 ? track.album.images[0].url : 'https://via.placeholder.com/150',
-        url: `https://open.spotify.com/track/${track.id}`,
-      }));
-    }
-  } catch (error) {
-    console.error('Error al buscar en Spotify:', error);
-    return [];
-  }
-};
+import { searchSpotify } from '../services/spotifyService';
 
 const SpotifyGrid = () => {
-  const [data, setData] = useState([]);
-  const [query, setQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchType, setSearchType] = useState('artist');
+  const [data, setData] = useState([]);  // Estado para los resultados
+  const [query, setQuery] = useState('');  // Estado para la consulta
+  const [isLoading, setIsLoading] = useState(false);  // Estado de carga
+  const [searchType, setSearchType] = useState('artist');  // Tipo de búsqueda (por defecto, artistas)
+  const [error, setError] = useState(false);  // Estado para manejar errores
 
   useEffect(() => {
     if (query.trim() === '') {
-      setData([]);
+      setData([]); // Si no hay consulta, limpiar los resultados
       return;
     }
 
-    const delayDebounceFn = setTimeout(async () => {
-      setIsLoading(true);
-      const results = await searchSpotify(query, searchType);
-      setData(results);
-      setIsLoading(false);
-    }, 500); 
+    const fetchData = async () => {
+      setIsLoading(true);  // Marcar como cargando
+      setError(false);  // Resetear el error
+      try {
+        const results = await searchSpotify(query, searchType);  // Llamada a la función de búsqueda
+        if (results.length === 0) {
+          setError(true);  // Si no hay resultados, marcar como error
+        }
+        setData(results);  // Almacenar los resultados
+      } catch (err) {
+        console.error("Error al buscar en Spotify:", err);
+        setError(true);  // Si ocurre un error, marcar como error
+      }
+      setIsLoading(false);  // Desmarcar como cargando
+    };
 
-    return () => clearTimeout(delayDebounceFn);
+    // Llamar la búsqueda solo después de que el usuario termine de escribir (debounce)
+    const delayDebounceFn = setTimeout(() => {
+      fetchData();
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn); // Limpiar el timeout en cada renderizado
   }, [query, searchType]);
 
   return (
@@ -98,7 +49,7 @@ const SpotifyGrid = () => {
           type="text"
           placeholder="Buscar artistas, novedades, géneros..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}  // Cambiar estado de query al escribir
           className="search-input"
         />
       </form>
@@ -111,8 +62,8 @@ const SpotifyGrid = () => {
         {isLoading ? (
           <p>Cargando resultados...</p>
         ) : (
-          data.length === 0 ? (
-            <p>No se encontraron resultados.</p>
+          error ? (
+            <p>No se encontraron resultados.</p>  // Mostrar solo si hay un error
           ) : (
             data.map((item) => (
               <div key={item.id} className="grid-item">

@@ -32,17 +32,26 @@ export const searchSpotify = async (query, searchType) => {
   if (!token) return [];
 
   try {
-    // Cambiar el tipo de búsqueda en la URL de la API dependiendo de la selección (artistas o canciones)
+    // Llamada a la API de Spotify
     const response = await fetch(
       `https://api.spotify.com/v1/search?q=${query}&type=${searchType}&limit=18`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
+    // Verificar si la respuesta fue exitosa
+    if (!response.ok) {
+      throw new Error("Error al obtener resultados de Spotify");
+    }
+
     const data = await response.json();
     console.log("Datos obtenidos de la búsqueda:", data); // Log para revisar la respuesta
 
+    // Manejar la respuesta dependiendo del tipo de búsqueda
     if (searchType === "artist") {
-      // Devolver los artistas encontrados
+      if (!data.artists || !data.artists.items || data.artists.items.length === 0) {
+        console.log("No se encontraron artistas.");
+        return []; // No se encontraron artistas
+      }
       return data.artists.items.map(artist => ({
         id: artist.id,
         name: artist.name,
@@ -50,7 +59,10 @@ export const searchSpotify = async (query, searchType) => {
         url: `https://open.spotify.com/artist/${artist.id}`,
       }));
     } else if (searchType === "track") {
-      // Devolver las canciones encontradas
+      if (!data.tracks || !data.tracks.items || data.tracks.items.length === 0) {
+        console.log("No se encontraron canciones.");
+        return []; // No se encontraron canciones
+      }
       return data.tracks.items.map(track => ({
         id: track.id,
         name: track.name,

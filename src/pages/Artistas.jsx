@@ -8,9 +8,14 @@ import Footer from "../components/Footer";
 
 const Artistas = () => {
   const [query, setQuery] = useState("");
-  const [searchType, setSearchType] = useState("artist"); // 'artist' o 'track'
+  const [searchType, setSearchType] = useState("artist");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+
+  useEffect(() => {
+    // Aseguramos que el scroll inicie en la parte superior al cargar la página
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleImageError = (index) => {
     setSearchResults((prevResults) =>
@@ -26,7 +31,7 @@ const Artistas = () => {
     setIsSearching(true);
 
     try {
-      const results = await searchSpotify(query, searchType);  // Ahora se pasa el searchType a la función de búsqueda
+      const results = await searchSpotify(query, searchType);
       console.log("Resultados obtenidos:", results);
       setSearchResults(results);
     } catch (error) {
@@ -38,55 +43,52 @@ const Artistas = () => {
 
   useEffect(() => {
     if (query) {
-      fetchData();  // Llamada a la función para obtener los resultados cuando cambie el query
+      fetchData();
     }
-  }, [query, searchType]); // Se vuelve a ejecutar cuando cambia el query o el tipo de búsqueda
+  }, [query, searchType]);
 
   return (
     <div className="artistas-container">
       <ArtistasSlider />
-
-      <div className="search-container">
-        <input
-          type="text"
-          className="search-input"
-          placeholder={`Busca ${searchType === "artist" ? "artistas" : "canciones"}...`}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)} 
-        />
-        <button className="search-button" onClick={fetchData} disabled={isSearching}>
-          {isSearching ? "Buscando..." : "Buscar"}
-        </button>
-      </div>
-
-      <div className="search-filters">
-        <div className="filter-option">
-          <button
-            onClick={() => setSearchType("artist")} 
-            className={searchType === "artist" ? "active" : ""}
-          >
-            Artistas
+      <div className="artistas-content">
+        <div className="search-container">
+          <input
+            type="text"
+            className="search-input"
+            placeholder={`Busca ${searchType === "artist" ? "artistas" : "canciones"}...`}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button className="search-button" onClick={fetchData} disabled={isSearching}>
+            {isSearching ? "Buscando..." : "Buscar"}
           </button>
         </div>
-        <div className="filter-option">
-          <button
-            onClick={() => setSearchType("track")} 
-            className={searchType === "track" ? "active" : ""}
-          >
-            Canciones
-          </button>
+        <div className="search-filters">
+          <div className="filter-option">
+            <button
+              onClick={() => setSearchType("artist")}
+              className={searchType === "artist" ? "active" : ""}
+            >
+              <span className="filter-text">Artistas</span>
+            </button>
+          </div>
+          <div className="filter-option">
+            <button
+              onClick={() => setSearchType("track")}
+              className={searchType === "track" ? "active" : ""}
+            >
+              <span className="filter-text">Canciones</span>
+            </button>
+          </div>
         </div>
-      </div>
 
-      {query && !isSearching && (
-        <p className="search-results-info">Resultados con: {query}</p>
-      )}
+        {query && !isSearching && (
+          <p className="search-results-info">Resultados con: {query}</p>
+        )}
 
-      <div className="artistas-grid">
-        {isSearching ? (
-          <p>Cargando resultados...</p>
-        ) : (
-          searchResults.length > 0 ? (
+        <div className="artistas-grid">
+          {isSearching && <p>Cargando resultados...</p>}
+          {!isSearching && searchResults.length > 0 && (
             searchResults.map((item, index) => (
               <div key={item.id || index} className="artista-card">
                 <img 
@@ -101,12 +103,12 @@ const Artistas = () => {
                 </a>
               </div>
             ))
-          ) : (
+          )}
+          {!isSearching && query && searchResults.length === 0 && (
             <p>No se encontraron resultados.</p>
-          )
-        )}
+          )}
+        </div>
       </div>
-
       <Footer />
     </div>
   );

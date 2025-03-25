@@ -23,7 +23,7 @@ const recomendadosData = [
   {
     id: 3,
     title: "Ultra Sodade",
-    description: "En su nuevo disco, el más personal y ambicioso hasta la fecha, Kevin Kaarl relata las etapas de una ruptura con crudeza y belleza, mostrando una fuerte evolución en su sonido.",
+    description: "En su nuevo disco, el más personal y ambicioso hasta la fecha, Kevin Kaarl relata las etapas de una ruptura con belleza, mostrando una evolución en su sonido.",
     imgSrc: kevinKaarl,
     playlistUrl: "https://open.spotify.com/playlist/37i9dQZF1DZ06evO41O9oc"
   },
