@@ -445,7 +445,7 @@ font-size: 2rem;
   background-color: #1a1a1a;
 }
 
-[data-theme="light"] {
+.light-mode {
   background-color: #d2d2da; 
   color: #000; 
 }
@@ -528,7 +528,7 @@ color: #251f46;
   color: #fff;  
 }
 
-[data-theme="dark"] {
+.dark-mode {
   background-color: #212025; 
   color: #fff; 
 }
