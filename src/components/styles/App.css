@@ -148,7 +148,9 @@ h1, h2, h3 {
   padding: 2rem 1rem;
   justify-content: center;
   align-items: stretch;
-  max-height: 80vh;
+  max-height: auto;
+  overflow-x: hidden; 
+  
 }
 
 .recomendados-title {
@@ -178,7 +180,7 @@ h1, h2, h3 {
 }
 
 .recomendados-item img {
-  width: 100%;
+  max-width: 100%;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -247,7 +249,7 @@ font-size: 2rem;
 @keyframes fadeIn {
   0% {
     opacity: 0;
-    transform: translateY(20px); /* Desplazamiento suave desde abajo */
+    transform: translateY(10px); /* Desplazamiento suave desde abajo */
   }
   100% {
     opacity: 1;
@@ -790,9 +792,21 @@ color: #251f46;
     font-size: 1.75rem;
   }
 
+
+
   .recomendados-title {
     font-size: 1.75rem;
 
+  }
+  
+  .recomendados-spotify-button {
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor; 
+    padding-bottom: 2px;
+    transition: opacity 0.3s ease, background-color 0.3s ease; 
+    margin-top: 8px;
   }
 
   .carousel {
@@ -818,22 +832,23 @@ color: #251f46;
 
   .recomendados-container {
     grid-template-columns: repeat(1, auto);
-    gap: 20px; 
-    overflow-x: hidden; /* Asegura que no haya scroll horizontal */
+    gap: 12px; 
     padding: 0;
+    box-sizing: border-box;
 
   }
 
   .recomendados-item {
-    width: 100%; /* Asegura que las tarjetas tengan el 100% del ancho disponible */
+    max-width: 100%;
     padding: 1rem;
-    box-sizing: border-box;
+    height: auto;
+    margin-top: 1rem; 
   }
   
   .recomendados-item img {
-    width: 100%; /* Asegura que las imágenes no se desborden */
-    height: auto; /* Ajusta la altura de las imágenes para mantener el aspecto */
-    object-fit: cover; /* Asegura que la imagen se recorte correctamente */
+    max-height: 290px;
+    max-width: 100%; 
+    object-fit: cover; 
     border-radius: 8px;
   }
   
@@ -948,7 +963,7 @@ color: #251f46;
   }
 
 
-  .container, .carousel, .carousel-container, .carousel-item, .recomendados-container, .artistas-grid, .grid-container {
+  .container, .carousel, .carousel-container, .carousel-item, .artistas-grid, .grid-container {
     overflow-x: hidden; 
   }
 
@@ -986,11 +1001,15 @@ color: #251f46;
 .informative-banner,
 .informative-video-container {
   height: 300px; 
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+  
 }
 
 .informative-banner img,
 .informative-video {
   border-radius: 8px; 
+
 }
 
 .informative-banner-overlay,
@@ -1009,7 +1028,10 @@ color: #251f46;
 .informative-right {
   width: 110%; 
   padding: 10px;
+  
 }
+
+
 
 
 }
@@ -1100,7 +1122,7 @@ color: #251f46;
     top: 10px;
     transform: none;
   }
-  .container, .carousel, .carousel-container, .carousel-item, .recomendados-container, .artistas-grid, .grid-container {
+  .container, .carousel, .carousel-container, .carousel-item, .artistas-grid, .grid-container {
     overflow-x: hidden; 
   }
 
@@ -1121,18 +1143,39 @@ color: #251f46;
     display: none;
   }
 
+  .recomendados-container {
+    grid-template-columns: repeat(1, auto);
+    gap: 12px; 
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+
+  }
+
   .recomendados-item {
+    max-width: 100%;
+    overflow: hidden;
     padding: 1rem;
-    width: 100%;
-    max-width: 100%; 
+    margin-top: 1rem;
   }
   
-
   .recomendados-item img {
-    width: 100%; 
-    height: auto;
+    max-height: 290px;
+    max-width: 100%; 
+    object-fit: cover; 
     border-radius: 8px;
-}
+  }
+  
+  .recomendados-item h3 {
+    font-size: 1.1rem;
+  }
+  .recomendados-item p {
+    font-size: 0.9rem; 
+    max-height: 5rem; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
   .search-container {
     width: 100%;
@@ -1140,11 +1183,43 @@ color: #251f46;
   }
 
   .footer {
-    padding: 15px 10px; /* Ajustar padding para móviles */
+    padding: 15px 10px; 
     text-align: center;
-    width: 100%;  /* Asegura que el footer ocupe todo el ancho */
-    max-width: 100vw; /* Previene cualquier desbordamiento */
+    width: 100%;  
+    max-width: 100vw; 
   }
+  .informative-banner,
+  .informative-video-container {
+    height: 300px; 
+    margin-left: 0.2rem;
+    margin-right: 0.2rem;
+    
+  }
+
+.informative-banner img,
+.informative-video {
+  border-radius: 8px; 
+
+}
+
+.informative-banner-overlay,
+.informative-video-overlay {
+  font-size: 1rem; 
+  width: 90%; 
+  padding: 8px; 
+}
+
+.informative-content {
+  flex-direction: column; 
+  gap: 20px; 
+}
+
+.informative-left,
+.informative-right {
+  width: 110%; 
+  padding: 10px;
+}
+
 
 }
 

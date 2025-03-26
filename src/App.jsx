@@ -12,18 +12,18 @@ import Footer from "./components/Footer";
 import Artistas from "./pages/Artistas";
 import ContactPage from "./pages/ContactPage";
 
-
 import banner1 from "./assets/banners/bannerconcertmedium.jpg";
 import banner2 from "./assets/banners/pexels-chaitaastic-2093323.jpg";
 import banner3 from "./assets/banners/pexels-jc-siller-30672065-8649332.jpg";
 
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    return localStorage.getItem("darkMode") === "true";
+    const savedMode = localStorage.getItem("darkMode");
+    return savedMode ? savedMode === "true" : true; 
   });
 
   const [isMobile, setIsMobile] = useState(false);  
-  const location = useLocation();  // Obtener la ruta actual
+  const location = useLocation();  
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
@@ -44,7 +44,6 @@ const App = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Función para aplicar la animación de scroll en las secciones
   useEffect(() => {
     const handleScroll = () => {
       document.querySelectorAll(".fade-in").forEach((element) => {
@@ -62,13 +61,12 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    // Limpiar los resultados de búsqueda al cambiar de ruta
   }, [location.pathname]);
 
   const toggleTheme = () => {
     setIsDarkMode((prevMode) => {
       const newMode = !prevMode;
-      localStorage.setItem("darkMode", newMode);
+      localStorage.setItem("darkMode", newMode);  
       return newMode;
     });
   };

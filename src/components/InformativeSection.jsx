@@ -4,7 +4,7 @@ import banner from "../assets/banners/pexels-dmitry-demidov-515774-3784566.jpg";
 
 const InformativeSection = () => {
   return (
-    <section className="informative-section fade-in">
+    <section className="informative-section">
       <h2 className="informative-title">Sobre Nosotros</h2> 
       <div className="informative-content">
         <div className="informative-left">

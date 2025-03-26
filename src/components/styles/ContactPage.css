@@ -186,7 +186,7 @@ body {
 
 .light-mode .contact-form input,
 .light-mode .contact-form textarea {
-  background-color: #d2d2da;
+  background-color: #ffffff;
   border: 1px solid #ffffff;
   color: #08083f;
 }
@@ -206,7 +206,7 @@ body {
 }
 .dark-mode .contact-form input,
 .dark-mode .contact-form textarea {
-  background-color: #555;
+  background-color: #747477;
   border: 1px solid #ffffff;
   color: white;
 }
