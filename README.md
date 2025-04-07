@@ -15,9 +15,15 @@ Built with React Router to navigate between different sections such as artist se
 **Technologies Used**
 
 -React: For building the user interface and managing app state.
+
 -CSS3: For responsive styling and UI customization.
+
 -JavaScript: Used to create dynamic behaviors, handle logic and data flow, and interact with APIs.
+
 -HTML5: Provides the semantic structure of the app, ensuring accessibility and clean markup.
+
 -React Router: To handle routing and navigation within the app.
+
 -Spotify API: To access artist and song data.
+
 -Vite: A fast build tool for modern React projects.
