@@ -1,21 +1,24 @@
-# Sonic Finder
+**Sonic Finder**
+Sonic Finder is a responsive web application built with React, designed to help users search for artists on Spotify, explore recommended content, and access relevant information about artists and songs. With a clean, user-friendly design and a focus on accessibility, the app delivers a smooth experience across both desktop and mobile devices. It also includes a light/dark mode toggle.
 
-Sonic Finder es una aplicación web responsive creada con React, diseñada para ayudar a los usuarios a buscar artistas en Spotify, explorar contenido recomendado, y obtener información relevante sobre artistas y canciones. Con un diseño limpio, fácil de usar y un enfoque en la accesibilidad, la app ofrece una experiencia fluida tanto en dispositivos de escritorio como móviles. Además, permite alternar entre modo claro y oscuro.
+**Key Features**
+Artist Search: Users can search for artists using a search input that queries the Spotify API.
 
-## Funcionalidades Principales
+Recommended Content: A section with popular and suggested artists that updates automatically based on available data from the API.
 
-- **Búsqueda de Artistas**: Los usuarios pueden buscar artistas utilizando el input de búsqueda que consulta la API de Spotify. 
-- **Contenido Recomendado**: Una sección de artistas recomendados y populares que se actualiza automáticamente al cambiar el contenido disponible en la API.
-- **Interfaz Responsiva**: La app está optimizada para funcionar en diferentes dispositivos, incluyendo móviles y tabletas.
-- **Modo Oscuro/Claro**: La aplicación permite cambiar entre modo oscuro y claro según la preferencia del usuario. El modo se guarda en el almacenamiento local para que se mantenga entre sesiones.
-- **Navegación Intuitiva**: Utiliza React Router para navegar entre las diferentes secciones, como la búsqueda de artistas, la página de contacto, y las recomendaciones.
+Responsive Interface: The app is optimized for various devices, including smartphones and tablets.
 
-## Tecnologías Utilizadas
+Dark/Light Mode: Users can switch between dark and light themes. The selected mode is saved in local storage to persist between sessions.
 
-- **React**: Para la construcción de la interfaz de usuario y la gestión del estado de la app.
-- **CSS3**: Estilos responsivos y personalización de la UI.
-- **React Router**: Para la gestión de rutas y navegación dentro de la aplicación.
-- **Spotify API**: Para acceder a los datos de artistas y canciones.
-- **Vite**: Herramienta de construcción rápida para proyectos React.
+Intuitive Navigation: Built with React Router to navigate between different sections such as artist search, contact page, and recommendations.
 
+**Technologies Used**
+React: For building the user interface and managing app state.
 
+CSS3: For responsive styling and UI customization.
+
+React Router: To handle routing and navigation within the app.
+
+Spotify API: To access artist and song data.
+
+Vite: A fast build tool for modern React projects.
