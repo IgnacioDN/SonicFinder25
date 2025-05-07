@@ -27,3 +27,6 @@ Built with React Router to navigate between different sections such as artist se
 -Spotify API: To access artist and song data.
 
 -Vite: A fast build tool for modern React projects.
+
+![image](https://github.com/user-attachments/assets/9fb4c59f-f7b1-4c4f-8a11-9f19b458c331)
+
